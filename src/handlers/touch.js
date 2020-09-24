@@ -1,9 +1,9 @@
 import updateGeometry from '../update-geometry';
 import cls from '../lib/class-names';
 import * as CSS from '../lib/css';
-import {env} from '../lib/util';
+import { env } from '../lib/util';
 
-export default function (i) {
+export default function(i) {
   if (!env.supportsTouch && !env.supportsIePointer) {
     return;
   }
@@ -41,8 +41,8 @@ export default function (i) {
   }
 
   function applyTouchMove(differenceX, differenceY) {
-    element.scrollTop -= differenceY / window["appScale"] ? window["appScale"] : 1;
-    element.scrollLeft -= differenceX / window["appScale"] ? window["appScale"] : 1;
+    element.scrollTop -= differenceY / window["appScale"]?window["appScale"]:1;
+    element.scrollLeft -= differenceX / window["appScale"]?window["appScale"]:1;
 
     updateGeometry(i);
   }
@@ -108,26 +108,26 @@ export default function (i) {
       }
 
       const style = CSS.get(cursor);
+      const overflow = [style.overflow, style.overflowX, style.overflowY].join(
+        ''
+      );
 
-      // if deltaY && vertical scrollable
-      if (deltaY && style.overflowY.match(/(scroll|auto)/)) {
+      // if scrollable
+      if (overflow.match(/(scroll|auto)/)) {
         const maxScrollTop = cursor.scrollHeight - cursor.clientHeight;
         if (maxScrollTop > 0) {
           if (
-            (cursor.scrollTop > 0 && deltaY < 0) ||
-            (cursor.scrollTop < maxScrollTop && deltaY > 0)
+            !(cursor.scrollTop === 0 && deltaY > 0) &&
+            !(cursor.scrollTop === maxScrollTop && deltaY < 0)
           ) {
             return true;
           }
         }
-      }
-      // if deltaX && horizontal scrollable
-      if (deltaX && style.overflowX.match(/(scroll|auto)/)) {
-        const maxScrollLeft = cursor.scrollWidth - cursor.clientWidth;
+        const maxScrollLeft = cursor.scrollLeft - cursor.clientWidth;
         if (maxScrollLeft > 0) {
           if (
-            (cursor.scrollLeft > 0 && deltaX < 0) ||
-            (cursor.scrollLeft < maxScrollLeft && deltaX > 0)
+            !(cursor.scrollLeft === 0 && deltaX < 0) &&
+            !(cursor.scrollLeft === maxScrollLeft && deltaX > 0)
           ) {
             return true;
           }
@@ -144,7 +144,7 @@ export default function (i) {
     if (shouldHandle(e)) {
       const touch = getTouch(e);
 
-      const currentOffset = {pageX: touch.pageX, pageY: touch.pageY};
+      const currentOffset = { pageX: touch.pageX, pageY: touch.pageY };
 
       const differenceX = currentOffset.pageX - startOffset.pageX;
       const differenceY = currentOffset.pageY - startOffset.pageY;
@@ -170,11 +170,10 @@ export default function (i) {
       }
     }
   }
-
   function touchEnd() {
     if (i.settings.swipeEasing) {
       clearInterval(easingLoop);
-      easingLoop = setInterval(function () {
+      easingLoop = setInterval(function() {
         if (i.isInitialized) {
           clearInterval(easingLoop);
           return;
