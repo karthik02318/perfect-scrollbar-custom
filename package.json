@@ -1,8 +1,8 @@
 {
   "name": "perfect-scrollbar-custom",
-  "version": "1.5.0",
-  "description": "Minimalistic but perfect custom scrollbar plugin",
-  "author": "Hyunje Jun <me@noraesae.net>",
+  "version": "1.0.0",
+  "description": "perfect custom scrollbar",
+  "author": "karthik",
   "keywords": [
     "frontend",
     "scroll",
